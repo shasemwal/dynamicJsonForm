@@ -1,54 +1,100 @@
-# React + TypeScript + Vite
+# 🚀 Dynamic Form POC (React + TypeScript + Zod)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project demonstrates a dynamic form built in React using a JSON configuration. It supports:
 
-Currently, two official plugins are available:
+- Dynamic field rendering
+- Conditional logic (enable/disable fields)
+- Zod-based validation
+- Error handling
+- Controlled components
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📁 Folder Structure
 
-## Expanding the ESLint configuration
+```
+src/
+├── components/
+│   └── DynamicFieldRenderer.tsx       # Renders individual form fields based on config
+├── config/
+│   └── formConfig.json                # JSON schema defining fields, types, validations
+├── utils/
+│   └── zodSchemaBuilder.ts            # Builds Zod schema from JSON config
+├── App.tsx                            # Main app component
+├── DynamicForm.tsx                    # Renders the full form using react-hook-form
+└── main.tsx                           # Entry point
+```
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🧩 Components Overview
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### `DynamicForm.tsx`
+- Uses `react-hook-form` to manage form state.
+- Loads the JSON config and renders fields using `DynamicFieldRenderer`.
+- Applies Zod validation schema generated from `zodSchemaBuilder`.
+
+### `DynamicFieldRenderer.tsx`
+- Renders inputs (`text`, `email`, `number`, `date`, `radio`, `dropdown`, `checkbox`) based on field type.
+- Applies conditional logic (e.g., disable if another field has a certain value).
+- Displays error messages below inputs.
+- Uses inline styles or CSS Modules for layout.
+
+### `formConfig.json`
+- Defines each field with:
+  - `name`, `label`, `type`
+  - `required`, `options`, `placeholder`
+  - `validation` (e.g., minLength, regex, errorMessage)
+  - `conditional` logic
+
+### `zodSchemaBuilder.ts`
+- Converts the JSON config into a Zod schema.
+- Supports string, number, email, regex, min/max length, and custom error messages.
+
+---
+
+## 🛠️ Getting Started
+
+### 1. Install dependencies
+
+``` npm install ```
+
+
+### 2. Run the app
+
+``` npm run dev ```
+
+
+### 3. Open in browser
+
+Visit http://localhost:5173
+
+---
+
+## ➕ Adding New Fields
+
+To add a new field:
+1. Open `formConfig.json`
+2. Add a new object like:
+
+```
+{ "name": "phone", "label": "Phone Number", "type": "text", "required": true, "validation": { "regex": "^[0-9]{10}$", "errorMessage": "Phone number must be 10 digits" } }
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 🧠 Extending the Form
+
+- Add new field types (e.g., file upload) in `DynamicFieldRenderer.tsx`
+- Add new validation rules in `zodSchemaBuilder.ts`
+- Add sections or layout wrappers in `DynamicForm.tsx`
+
+---
+
+## 📦 Built With
+
+- React
+- TypeScript
+- Zod
+- React Hook Form
+- Vite
+
