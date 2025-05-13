@@ -1,0 +1,35 @@
+/* DynamicFieldRenderer.module.css */
+
+.fieldWrapper {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.checkbox {
+  margin-right: 0.5rem;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}

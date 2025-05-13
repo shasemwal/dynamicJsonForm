@@ -1,0 +1,107 @@
+[
+  {
+    "name": "fullName",
+    "label": "Full Name",
+    "type": "text",
+    "required": true,
+    "validation": {
+      "minLength": 3,
+      "maxLength": 50,
+      "errorMessage": "Full Name must be between 3 and 50 characters"
+    }
+  },
+  {
+    "name": "email",
+    "label": "Email",
+    "type": "email",
+    "required": true,
+    "validation": {
+      "email": true,
+      "errorMessage": "Please enter a valid email address"
+    }
+  },
+  {
+    "name": "age",
+    "label": "Age",
+    "type": "number",
+    "required": true,
+    "validation": {
+      "min": 18,
+      "max": 99,
+      "errorMessage": "Age must be between 18 and 99"
+    }
+  },
+  {
+    "name": "isStudent",
+    "label": "Are you a student?",
+    "type": "radio",
+    "options": ["yes", "no"],
+    "required": true,
+    "validation": {
+      "errorMessage": "Please select if you are a student"
+    }
+  },
+  {
+    "name": "schoolName",
+    "label": "School Name",
+    "type": "text",
+    "required": false,
+    "conditional": {
+      "field": "isStudent",
+      "value": "yes",
+      "action": "enable"
+    },
+    "validation": {
+      "minLength": 2,
+      "errorMessage": "School name must be at least 2 characters"
+    }
+  },
+  {
+    "name": "gender",
+    "label": "Gender",
+    "type": "dropdown",
+    "options": ["Male", "Female", "Other"],
+    "required": true,
+    "validation": {
+      "errorMessage": "Please select your gender"
+    }
+  },
+  {
+    "name": "dob",
+    "label": "Date of Birth",
+    "type": "date",
+    "required": true,
+    "validation": {
+      "errorMessage": "Date of birth is required"
+    }
+  },
+  {
+    "name": "phone",
+    "label": "Phone Number",
+    "type": "text",
+    "required": true,
+    "validation": {
+      "regex": "^[0-9]{10}$",
+      "errorMessage": "Phone number must be 10 digits"
+    }
+  },
+  {
+    "name": "country",
+    "label": "Country",
+    "type": "dropdown",
+    "options": ["India", "USA", "UK"],
+    "required": true,
+    "validation": {
+      "errorMessage": "Please select your country"
+    }
+  },
+  {
+    "name": "state",
+    "label": "State",
+    "type": "text",
+    "required": true,
+    "validation": {
+      "errorMessage": "State is required"
+    }
+  }
+]
