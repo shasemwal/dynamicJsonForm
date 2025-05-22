@@ -4,104 +4,415 @@
     "label": "Full Name",
     "type": "text",
     "required": true,
-    "validation": {
-      "minLength": 3,
-      "maxLength": 50,
-      "errorMessage": "Full Name must be between 3 and 50 characters"
-    }
-  },
-  {
-    "name": "email",
-    "label": "Email",
-    "type": "email",
-    "required": true,
-    "validation": {
-      "email": true,
-      "errorMessage": "Please enter a valid email address"
-    }
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "placeholder": "Enter your full name",
+    "defaultValue": "",
+    "description": "This will be used for identification",
+    "tooltip": "Your legal name",
+    "layout": { "span": 6, "inline": false },
+    "dependencies": [],
+    "validations": [
+      { "rule": "minLength", "value": 3, "message": "Too short" },
+      { "rule": "maxLength", "value": 50, "message": "Too long" }
+    ]
   },
   {
     "name": "age",
     "label": "Age",
     "type": "number",
     "required": true,
-    "validation": {
-      "min": 18,
-      "max": 99,
-      "errorMessage": "Age must be between 18 and 99"
-    }
-  },
-  {
-    "name": "isStudent",
-    "label": "Are you a student?",
-    "type": "radio",
-    "options": ["yes", "no"],
-    "required": true,
-    "validation": {
-      "errorMessage": "Please select if you are a student"
-    }
-  },
-  {
-    "name": "schoolName",
-    "label": "School Name",
-    "type": "text",
-    "required": false,
-    "conditional": {
-      "field": "isStudent",
-      "value": "yes",
-      "action": "enable"
-    },
-    "validation": {
-      "minLength": 2,
-      "errorMessage": "School name must be at least 2 characters"
-    }
-  },
-  {
-    "name": "gender",
-    "label": "Gender",
-    "type": "dropdown",
-    "options": ["Male", "Female", "Other"],
-    "required": true,
-    "validation": {
-      "errorMessage": "Please select your gender"
-    }
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "placeholder": "Enter your age",
+    "defaultValue": 25,
+    "layout": { "span": 6 },
+    "validations": [
+      { "rule": "min", "value": 18, "message": "Must be at least 18" },
+      { "rule": "max", "value": 99, "message": "Too old" }
+    ]
   },
   {
     "name": "dob",
     "label": "Date of Birth",
     "type": "date",
     "required": true,
-    "validation": {
-      "errorMessage": "Date of birth is required"
-    }
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "placeholder": "Select your birth date",
+    "defaultValue": "",
+    "layout": { "span": 6 }
   },
   {
-    "name": "phone",
-    "label": "Phone Number",
-    "type": "text",
+    "name": "resume",
+    "label": "Upload Resume",
+    "type": "file",
     "required": true,
-    "validation": {
-      "regex": "^[0-9]{10}$",
-      "errorMessage": "Phone number must be 10 digits"
-    }
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "defaultValue": "",
+    "layout": { "span": 6 },
+    "fileConfig": {
+      "accept": [".pdf", ".docx"],
+      "maxSizeMB": 5,
+      "multiple": false
+    },
+    "validations": [
+      { "rule": "fileType", "value": [".pdf", ".docx"], "message": "Only PDF or DOCX allowed" },
+      { "rule": "fileSize", "value": 5, "message": "File must be under 5MB" }
+    ]
+  },
+  {
+    "name": "gender",
+    "label": "Gender",
+    "type": "radio",
+    "required": true,
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "defaultValue": "",
+    "layout": { "span": 6 },
+    "options": [
+      { "label": "Male", "value": "male" },
+      { "label": "Female", "value": "female" },
+      { "label": "Other", "value": "other" }
+    ]
   },
   {
     "name": "country",
     "label": "Country",
-    "type": "dropdown",
-    "options": ["India", "USA", "UK"],
+    "type": "select",
     "required": true,
-    "validation": {
-      "errorMessage": "Please select your country"
-    }
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "defaultValue": "IN",
+    "layout": { "span": 6 },
+    "options": [
+      { "label": "India", "value": "IN" },
+      { "label": "USA", "value": "US" },
+      { "label": "Germany", "value": "DE" }
+    ]
   },
   {
-    "name": "state",
-    "label": "State",
+    "name": "subscribe",
+    "label": "Subscribe to newsletter",
+    "type": "checkbox",
+    "required": false,
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "defaultValue": false,
+    "layout": { "span": 6 }
+  },
+  {
+    "name": "passportNumber",
+    "label": "Passport Number",
+    "type": "text",
+    "required": false,
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "placeholder": "Enter passport number",
+    "defaultValue": "",
+    "layout": { "span": 6 },
+    "validations": [
+      { "rule": "pattern", "value": "^[A-Z]{1}[0-9]{7}$", "message": "Invalid passport format" }
+    ],
+    "conditions": [
+      {
+        "key": "country",
+        "value": "IN",
+        "actions": ["unhide", "require"]
+      },
+      {
+        "key": "country",
+        "value": "US",
+        "actions": ["hide", "optional"]
+      }
+    ]
+  },
+  {
+    "name": "customField",
+    "label": "Custom Field",
+    "type": "custom",
+    "required": true,
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "defaultValue": "",
+    "layout": { "span": 6 },
+    "customComponent": "MyCustomInputComponent"
+  },
+  {
+    "name": "minLengthField",
+    "label": "Min Length Field",
     "type": "text",
     "required": true,
-    "validation": {
-      "errorMessage": "State is required"
-    }
+    "placeholder": "At least 3 characters",
+    "defaultValue": "",
+    "validations": [
+      { "rule": "minLength", "value": 3, "message": "Minimum 3 characters required" }
+    ]
+  },
+  {
+    "name": "maxLengthField",
+    "label": "Max Length Field",
+    "type": "text",
+    "required": true,
+    "placeholder": "Max 10 characters",
+    "defaultValue": "",
+    "validations": [
+      { "rule": "maxLength", "value": 10, "message": "Maximum 10 characters allowed" }
+    ]
+  },
+  {
+    "name": "minValueField",
+    "label": "Min Value Field",
+    "type": "number",
+    "required": true,
+    "placeholder": "Minimum value 5",
+    "defaultValue": 0,
+    "validations": [
+      { "rule": "min", "value": 5, "message": "Value must be at least 5" }
+    ]
+  },
+  {
+    "name": "maxValueField",
+    "label": "Max Value Field",
+    "type": "number",
+    "required": true,
+    "placeholder": "Maximum value 100",
+    "defaultValue": 0,
+    "validations": [
+      { "rule": "max", "value": 100, "message": "Value must be at most 100" }
+    ]
+  },
+  {
+    "name": "emailField",
+    "label": "Email Field",
+    "type": "text",
+    "required": true,
+    "placeholder": "Enter a valid email",
+    "defaultValue": "",
+    "validations": [
+      { "rule": "email", "message": "Invalid email format" }
+    ]
+  },
+  {
+    "name": "urlField",
+    "label": "URL Field",
+    "type": "text",
+    "required": true,
+    "placeholder": "Enter a valid URL",
+    "defaultValue": "",
+    "validations": [
+      { "rule": "url", "message": "Invalid URL format" }
+    ]
+  },
+  {
+    "name": "patternField",
+    "label": "Pattern Field",
+    "type": "text",
+    "required": true,
+    "placeholder": "Format: A1234567",
+    "defaultValue": "",
+    "validations": [
+      { "rule": "pattern", "value": "^[A-Z]{1}[0-9]{7}$", "message": "Must match pattern A1234567" }
+    ]
+  },
+  {
+    "name": "fileTypeField",
+    "label": "File Type Field",
+    "type": "file",
+    "required": true,
+    "fileConfig": {
+      "accept": [".pdf", ".docx"],
+      "maxSizeMB": 5,
+      "multiple": false
+    },
+    "validations": [
+      { "rule": "fileType", "value": [".pdf", ".docx"], "message": "Only PDF or DOCX allowed" }
+    ]
+  },
+  {
+    "name": "fileSizeField",
+    "label": "File Size Field",
+    "type": "file",
+    "required": true,
+    "fileConfig": {
+      "accept": [".pdf"],
+      "maxSizeMB": 1,
+      "multiple": false
+    },
+    "validations": [
+      { "rule": "fileSize", "value": 1, "message": "File must be under 1MB" }
+    ]
+  },
+  {
+    "name": "triggerField",
+    "label": "Trigger Field",
+    "type": "select",
+    "required": true,
+    "defaultValue": "",
+    "options": [
+      { "label": "Show", "value": "show" },
+      { "label": "Hide", "value": "hide" },
+      { "label": "Require", "value": "require" },
+      { "label": "Optional", "value": "optional" },
+      { "label": "Enable", "value": "enable" },
+      { "label": "Disable", "value": "disable" },
+      { "label": "Readonly", "value": "readonly" },
+      { "label": "Editable", "value": "editable" }
+    ]
+  },
+  {
+    "name": "hideField",
+    "label": "Hide Field",
+    "type": "text",
+    "placeholder": "This will be hidden",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "hide",
+        "actions": ["hide"]
+      }
+    ]
+  },
+  {
+    "name": "unhideField",
+    "label": "Unhide Field",
+    "type": "text",
+    "hidden": true,
+    "placeholder": "This will be unhidden",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "show",
+        "actions": ["unhide"]
+      }
+    ]
+  },
+  {
+    "name": "requireField",
+    "label": "Require Field",
+    "type": "text",
+    "placeholder": "This will become required",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "require",
+        "actions": ["require"]
+      }
+    ]
+  },
+  {
+    "name": "optionalField",
+    "label": "Optional Field",
+    "type": "text",
+    "required": true,
+    "placeholder": "This will become optional",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "optional",
+        "actions": ["optional"]
+      }
+    ]
+  },
+  {
+    "name": "enableField",
+    "label": "Enable Field",
+    "type": "text",
+    "disabled": true,
+    "placeholder": "This will be enabled",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "enable",
+        "actions": ["enable"]
+      }
+    ]
+  },
+  {
+    "name": "disableField",
+    "label": "Disable Field",
+    "type": "text",
+    "placeholder": "This will be disabled",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "disable",
+        "actions": ["disable"]
+      }
+    ]
+  },
+  {
+    "name": "readonlyField",
+    "label": "Readonly Field",
+    "type": "text",
+    "placeholder": "This will become readonly",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "readonly",
+        "actions": ["readonly"]
+      }
+    ]
+  },
+  {
+    "name": "editableField",
+    "label": "Editable Field",
+    "type": "text",
+    "readOnly": true,
+    "placeholder": "This will become editable",
+    "conditions": [
+      {
+        "key": "triggerField",
+        "value": "editable",
+        "actions": ["editable"]
+      }
+    ]
+  },
+  {
+    "name": "email",
+    "label": "Email",
+    "type": "text",
+    "required": true,
+    "enable": true,
+    "readOnly": false,
+    "hidden": false,
+    "placeholder": "Enter your email",
+    "defaultValue": "",
+    "description": "We'll send an OTP to this email",
+    "tooltip": "Must be a valid email address",
+    "layout": { "span": 6 },
+    "validations": [
+      { "rule": "email", "message": "Invalid email format" }
+    ]
+  },
+  {
+    "name": "otp",
+    "label": "OTP",
+    "type": "text",
+    "required": true,
+    "enable": false,
+    "readOnly": false,
+    "hidden": false,
+    "placeholder": "Enter the OTP",
+    "defaultValue": "",
+    "description": "Enter the OTP sent to your email",
+    "layout": { "span": 6 }
+  },
+  {
+    "type": "button",
+    "name": "sendOtpButton",
+    "label": "Send OTP",
+    "onClick": "sendOtpHandler"
   }
 ]
+

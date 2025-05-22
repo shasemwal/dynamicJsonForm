@@ -1,61 +1,60 @@
-import { useForm, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { buildZodSchema } from "../utils/zodSchemaBuilder";
-import formConfig from "../config/formConfig.json";
-import { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { buildZodSchema } from '../utils/buildZodSchema';
+import { conditionWatcher } from '../utils/ConditionWatcher';
+import { buttonHandlers } from '../utils/buttonHandler';
+import type { FieldConfig, Props } from '../types/FieldConfig';
+import FormField from './FormField';
+import './styles/FormStyles.css';
 
-import DynamicFieldRenderer from "./DynamicFormRenderer";
+const DynamicForm: React.FC<Props> = ({ config, onSubmit }) => {
+  const [formConfig, setFormConfig] = useState(config);
 
-const DynamicForm = () => {
-  const schema = buildZodSchema(formConfig);
-  const methods = useForm({ resolver: zodResolver(schema) });
+  const defaultValues = useMemo(() => {
+    const values: Record<string, any> = {};
+    config.forEach(field => {
+      values[field.name] = field.defaultValue ?? '';
+    });
+    return values;
+  }, [config]);
+
+  const schema = useMemo(() => buildZodSchema(formConfig), [formConfig]);
+
+  const methods = useForm({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+    defaultValues
+  });
+
   const {
     control,
     handleSubmit,
-    watch,
+    getValues,
     setValue,
-    formState: { errors },
+    setError,
+    clearErrors,
+    formState: { errors }
   } = methods;
 
-  const conditionalFields = formConfig
-    .filter((field) => field.conditional)
-    .map((field) => field.conditional!.field);
+  const allValues = useWatch({ control });
 
-  useEffect(
-    () => {
-      conditionalFields.forEach((dep) => {
-        const value = watch(dep);
-        formConfig.forEach((field) => {
-          if (field.conditional?.field === dep) {
-            const shouldEnable = value === field.conditional.value;
-            setValue(field.name, shouldEnable ? "" : undefined);
-          }
-        });
-      });
-    },
-    conditionalFields.map((dep) => watch(dep))
-  );
-
-  const onSubmit = (data: any) => {
-    alert(JSON.stringify(data, null, 2));
-  };
+  useEffect(() => {
+    const updatedConfig = conditionWatcher(config, allValues);
+    setFormConfig(updatedConfig);
+  }, [allValues, config]);
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        {formConfig.map((field) => (
-          <DynamicFieldRenderer
-            key={field.name}
-            field={field}
-            control={control}
-            errors={errors}
-            watch={watch}
-          />
-        ))}
-
-        <button type="submit">Submit</button>
-      </form>
-    </FormProvider>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {formConfig.map(field => (
+        <FormField
+          key={field.name}
+          field={field}
+          methods={{ ...methods, buttonHandlers }}
+        />
+      ))}
+      <button type="submit">Submit</button>
+    </form>
   );
 };
 

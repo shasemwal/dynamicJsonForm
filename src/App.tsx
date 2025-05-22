@@ -1,12 +1,13 @@
+import React from 'react';
 import DynamicForm from './components/DynamicForm';
+import formConfig from './config/formConfig.json'; // or inline
 
-function App() {
-  return (
-    <div>
-      <h1>Dynamic Form POC</h1>
-      <DynamicForm />
-    </div>
-  );
-}
+const App = () => {
+  const handleSubmit = (data: any) => {
+    console.log('Form Data:', data);
+  };
+
+  return <DynamicForm config={formConfig} onSubmit={handleSubmit} />;
+};
 
 export default App;
